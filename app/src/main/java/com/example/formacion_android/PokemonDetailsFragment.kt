@@ -24,9 +24,6 @@ class PokemonDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pokemonId = args.pokemonId
-
-        binding.tvName.text = pokemonId
-        getSinglePokemon(pokemonId)
     }
 
     override fun onCreateView(
@@ -35,16 +32,5 @@ class PokemonDetailsFragment : Fragment() {
     ): View? {
         _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    private fun getSinglePokemon(name: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = Network.getRetrofit().create(PokemonApi::class.java).getSinglePokemon(name)
-            activity?.runOnUiThread {
-                Picasso.get().load(call.sprites.front_default).resize(400,0).into(binding.ivPokemon)
-                binding.tvHeight.text = (call.height.toFloat() / 10).toString()
-                binding.tvWeight.text = (call.weight.toFloat() / 10).toString()
-            }
-        }
     }
 }

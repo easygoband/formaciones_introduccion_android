@@ -8,15 +8,4 @@
     android:padding="16dp"
     android:layout_height="100dp"
     android:id="@+id/cardPokemon">
-    <ImageView
-        android:id="@+id/ivPokemon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop" />
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:background="@color/white"/>
 </androidx.cardview.widget.CardView>

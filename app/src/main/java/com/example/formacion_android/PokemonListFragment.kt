@@ -22,12 +22,8 @@ class PokemonListFragment : Fragment() {
     private var _binding: FragmentPokemonListBinding? = null
     private val binding get() = _binding!!
 
-    private val pokemonDataSource: PokemonDataSource = PokemonDataSource()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val offset = (0..1282).random()
-        getPokemons(offset = offset)
     }
 
     override fun onCreateView(
@@ -37,31 +33,5 @@ class PokemonListFragment : Fragment() {
         _binding = FragmentPokemonListBinding.inflate(inflater, container, false)
 
         return binding.root
-    }
-
-    private fun getPokemons(limit: Int = 20, offset: Int = 0) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = Network.getRetrofit().create(PokemonApi::class.java).getPokemons(limit, offset)
-            val pokemons = mutableListOf<SinglePokemonResponse>()
-            call.results.forEach {pokemon ->
-                val singlePokemonCall = Network.getRetrofit().create(PokemonApi::class.java).getSinglePokemon(pokemon.name)
-                pokemons.add(singlePokemonCall)
-            }
-            activity?.runOnUiThread {
-                if (pokemons.isNotEmpty()) {
-                    val adapter = PokemonAdapter(pokemons)
-                    adapter.setOnItemClickListener(object : PokemonAdapter.onItemClickListener{
-
-                        override fun onItemClick(position: Int, pokemon: SinglePokemonResponse) {
-                            findNavController().navigate(PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailsFragment(pokemonId = pokemon.name))
-                        }
-
-                    })
-                    binding.rvPokemons.layoutManager = GridLayoutManager(context, 2)
-                    binding.rvPokemons.adapter = adapter
-
-                }
-            }
-        }
     }
 }
